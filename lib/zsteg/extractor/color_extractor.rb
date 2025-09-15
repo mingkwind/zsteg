@@ -9,23 +9,23 @@ module ZSteg
         pixel_align = params[:pixel_align]
 
         ch_masks = []
-        case channels.first.size
-        when 1
-          # ['r', 'g', 'b']
-          channels.each{ |c| ch_masks << [c[0], bit_indexes(params[:bits])] }
-        when 2
-          # ['r3', 'g2', 'b3']
+        t = channels.first
+
+        if t =~ /\A[rgba]+\Z/
+          # 'rgb', 'rgba', 'gb', 'r'
+          if t.size > 1
+            return color_extract(params.merge(:channels => t.split('')))
+          else
+            # 'r', 'g'
+            channels.each{ |c| ch_masks << [c[0], bit_indexes(params[:bits])] }
+          end
+        elsif t =~ /\A[rgba]\d+\Z/
+          # 'r3', 'g2', 'b3' 
           channels.each{ |c| ch_masks << [c[0], bit_indexes(c[1].to_i)] }
         else
-          raise "invalid channels: #{channels.inspect}" if channels.size != 1
-          t = channels.first
-          if t =~ /\A[rgba]+\Z/
-            return color_extract(params.merge(:channels => t.split('')))
-          end
           raise "invalid channels: #{channels.inspect}"
         end
 
-        # total number of bits = sum of all channels bits
         nbits = ch_masks.map{ |x| x[1].size }.inject(&:+)
 
         if params[:prime]
