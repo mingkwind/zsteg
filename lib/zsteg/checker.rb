@@ -26,9 +26,9 @@ module ZSteg
       @extractor = Extractor.new(@image, params)
       @channels = params[:channels] ||
         if @image.alpha_used?
-          %w'r g b a rgb bgr rgba abgr'
+          %w'r g b a rg gr rb br ra ar gb bg ga ag ba ab rgba rgab rbga rbag rgbr rbgr grba grab gbra gbar brga brag bagr barg argb arbg agrb agbr abgr abrg'
         else
-          %w'r g b rgb bgr'
+          %w'r g b rg gr rb br gb bg rgb rbg grb gbr brg bgr'
         end
       @verbose = params[:verbose] || -2
       @file_cmd = FileCmd.new if params.fetch(:file, true)
@@ -91,7 +91,7 @@ module ZSteg
         when /all/
           params[:order] = %w'xy yx XY YX Xy yX xY Yx'
         when /auto/
-          params[:order] = 'xy'
+          params[:order] = %w'xy yx'
         end
       end
 
