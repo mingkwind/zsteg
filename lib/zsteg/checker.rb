@@ -26,7 +26,7 @@ module ZSteg
       @extractor = Extractor.new(@image, params)
       @channels = params[:channels] ||
         if @image.alpha_used?
-          %w'r g b a rg gr rb br ra ar gb bg ga ag ba ab rgba rgab rbga rbag rgbr rbgr grba grab gbra gbar brga brag bagr barg argb arbg agrb agbr abgr abrg'
+          %w'r g b a rg rb ra gr gb ga br bg ba ar ag ab rgb rga rbg rba rag rab grb gra gbr gba gar gab brg bra bgr bga bar bag arg arb agr agb abr abg rgba rgab rbga rbag ragb rabg grba grab gbra gbar garb gabr brga brag bgra bgar barg bagr argb arbg agrb agbr abrg abgr'
         else
           %w'r g b rg gr rb br gb bg rgb rbg grb gbr brg bgr'
         end
